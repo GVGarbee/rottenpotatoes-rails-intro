@@ -10,8 +10,23 @@ class MoviesController < ApplicationController
     # will render app/views/movies/show.<extension> by default
   end
 
+  helper_method :sort_column, :sort_direction
+
   def index
-    @movies = Movie.all
+    @movie = Product.order("#{sort_column} #{sort_direction}")
+  end
+private
+
+  def sortable_columns
+    ["title"]
+  end
+
+  def sort_column
+    sortable_columns.include?(params[:column]) ? params[:column] : "name"
+  end
+
+  def sort_direction
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
   end
 
   def new
